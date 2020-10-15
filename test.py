@@ -18,15 +18,8 @@ def main():
 
             num += 1
     
-    '''
-    for row in diagram:
-        print(row)
-    '''
     num = 0
-    '''
-    for row in diagram:
-        print(row)
-    '''
+    ''' いちいち実行するのめんどいので
     while num < 6:
         print("飛行機" + str(num+1) + "の走行距離を入力してください")
         val = input()
@@ -38,15 +31,27 @@ def main():
         else:
             print("数値を入れて下さい")
 
+    '''
+    #本番は以下6行消します
+    planes[0] = 1050
+    planes[1] = 850
+    planes[2] = 650
+    planes[3] = 450
+    planes[4] = 40
+    planes[5] = 1240
+
     num = 0
     frag[decision_standby(planes)] = True
 
     print("\n運行開始\n")
     
-    while num < 7:
+    while num < 14:
         flight_schedule(diagram, frag, planes)
         print(str(num+1) +"日目終了")
         
+        for row in diagram:
+            row[5] = False
+
         num += 1
 
 def decision_standby(planes):
