@@ -70,21 +70,24 @@ def flight_schedule(diagram, standby, planes):
         if standby[num] == True:
             print("飛行機" + str(num+1) + "検査まであと" + str(planes[num]) + "km スタンバイ")
         else:
+            amount_time = 0
             time = 3.00
             place = "start"
             print("飛行機"+ str(num+1))
             next = 0
-            
+
             while True:
                 next = next_flight(diagram, place, time)
                 place = diagram[next][3]
                 time = diagram[next][4]
+                amount_time += diagram[next][4] - diagram[next][2]
                 diagram[next][5] = True
                 if next_flight(diagram, place, time) == -1:
                     break
 
                 print(diagram[next][0])
 
+            planes[num] -= amount_time
             print("検査まであと" + str(planes[num]) + "km")
             
         num += 1
