@@ -153,7 +153,7 @@ def flight_schedule(diagram, inspection, standby, planes):
                 time = diagram[next][4]
                 amount_time += diagram[next][4] - diagram[next][2]
                 diagram[next][5] = True
-                #print(diagram[next][0])
+                print(diagram[next][0])
 
             planes[num] -= amount_time
             print("検査まであと" + str(planes[num]) + "km")
@@ -184,7 +184,6 @@ def next_flight(diagram, place, time):
         num += 1
 
     if frag == False:
-        print(result)
         return result
     else:
         return len(diagram)
