@@ -49,13 +49,20 @@ def main():
     print("\n運行開始\n")
     
     while num < 7:
-        aircraft_check(inspection, planes, standby)
         print("検査が必要な飛行機はありますか?(yes/no)")
         val = input()
         if val == "yes":
             print("機体の番号を入力してください")
             val = input()
             inspection[int(val) - 1] = random.randint(48, 168)
+            tmp = 0
+            
+            while tmp < len(standby):
+                standby[tmp] = False
+                tmp += 1
+
+            print(standby[4])
+            aircraft_check(inspection, planes, standby)
             flight_schedule(diagram, inspection, standby, planes)
             day_check = dia_check(diagram)
 
@@ -66,6 +73,7 @@ def main():
             print(day_check)
             num += 1
         elif val == "no":
+            aircraft_check(inspection, planes, standby)
             flight_schedule(diagram, inspection, standby, planes)
             day_check = dia_check(diagram)
 
@@ -92,6 +100,11 @@ def aircraft_check(inspection, planes, standby):
 
         if min < 100:
             inspection[tmp] = 48
+            tmp = 0
+            
+            while tmp < len(standby):
+                standby[tmp] = False
+                tmp += 1
     else:
         for ins in inspection: 
             ins -= 24
