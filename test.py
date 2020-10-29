@@ -9,6 +9,25 @@ def main():
     planes = [0] * 6     #各飛行機の検査までの走行距離
     standby = [0] * 6    #スタンバイ機のフラグ      
 
+    while True:
+        print("年を入れてください")
+        year = input()
+        if str.isdecimal(year) == True:
+            break
+
+        print("数値を入れて下さい")
+
+    while True:
+        print("月を入れてください")
+        month = input()
+        if str.isdecimal(month) == True:
+            if 1 <= int(month) <= 12:
+                break
+            
+        print("1から12の数値を入れて下さい")
+
+    day_information = [[[0] * 6 for i in range(3)] for j in range(day_of_month(month, year)+1)]
+    
     with open('diagram.csv') as f:
         reader = csv.reader(f)
         for row in reader:
@@ -45,49 +64,40 @@ def main():
     planes[5] = 1240
     
     num = 0
-
+    
     print("\n運行開始\n")
     
-    while num < 7:
+    flight_month(1, day_information, day_of_month(month, year), diagram, 0, inspection, standby, planes)
+   
+    while num < day_of_month(month, year):
+        print(year + "年" + month + "月" + str(num+1) + "日")
         print("検査が必要な飛行機はありますか?(yes/no)")
-        val = input()
-        if val == "yes":
-            print("機体の番号を入力してください")
-            val = input()
-            inspection[int(val) - 1] = random.randint(48, 168)
-            tmp = 0
-            
-            while tmp < len(standby):
-                standby[tmp] = False
-                tmp += 1
+        emergency = input()
 
-            print(standby[4])
-            aircraft_check(inspection, planes, standby)
-            flight_schedule(diagram, inspection, standby, planes)
-            day_check = dia_check(diagram)
+        if emergency != "yes" and emergency != "no":
+            print("yes か no を入力してください")
+            num - 1
+        elif emergency == "yes":
+            while True:
+                print("機体の番号を入力してください")
+                plane = input()
+                if 1 <= int(plane) <= 6:
+                    flight_month(num+1, day_information, day_of_month(month, year), diagram, int(plane), inspection, standby, planes)
+                    print(day_information)
+                    break
+                print("1~6の数値を入力してください") 
 
-            for dia in diagram:
-                dia[5] = False
+        num += 1
 
-            print(str(num+1) +"日目終了")
-            print(day_check)
-            num += 1
-        elif val == "no":
-            aircraft_check(inspection, planes, standby)
-            flight_schedule(diagram, inspection, standby, planes)
-            day_check = dia_check(diagram)
 
-            for dia in diagram:
-                dia[5] = False
-
-            print(str(num+1) +"日目終了")
-            print(day_check)
-            num += 1
-        else:
-            print("yes か no で答えてください")
-        
 def aircraft_check(inspection, planes, standby):
     min = 1250
+    num = 0
+
+    for sta in standby:
+        standby[num] = False
+        num += 1
+
     num = 0
 
     if inspection_check(inspection) == True:
@@ -147,6 +157,7 @@ def flight_schedule(diagram, inspection, standby, planes):
             print("飛行機" + str(num+1) + "検査中。検査終了まで後" + str(inspection[num]) + "時間")
             inspection[num] -= 24
             if inspection[num] <= 0:
+                inspection[num] = 0
                 planes[num] = 1250 
 
         elif standby[num] == True:
@@ -200,6 +211,65 @@ def next_flight(diagram, place, time):
         return result
     else:
         return len(diagram)
+
+def day_of_month(month, year):
+    month = int(month)
+    year = int(year)
+    
+    if month == 2:
+        if year % 4 == 0:
+            if year % 100 == 0:
+                if year % 400 == 0:
+                    return 29
+                else:
+                    return 28
+            else:
+                return 29
+        else:
+            return 28
+    elif month == 4 or month == 6 or month == 9 or month == 11:
+        return 30
+    elif month == 1 or month == 3 or month == 5 or month == 7 or month == 8 or month == 10 or month == 12:
+        return 31
+
+def flight_month(day, day_information, day_of_month, diagram, emergency, inspection, standby, planes):
+    if emergency != 0:
+        inspection[emergency] = random.randint(48, 168)
+    
+    while day-1 < day_of_month:
+        print(str(day) +"日の運行状況")
+        aircraft_check(inspection, planes, standby)
+        if day-1 == 0:
+            num = 0
+            while num < 6:
+                day_information[0][0][num] = inspection[num]
+                day_information[0][1][num] = standby[num]
+                day_information[0][2][num] = planes[num]
+
+                num += 1
+
+        flight_schedule(diagram, inspection, standby, planes)
+        day_check = dia_check(diagram)
+
+        for dia in diagram:
+            dia[5] = False
+
+        num = 0
+        
+        while num < 6:
+            day_information[day][0][num] = inspection[num]
+            day_information[day][1][num] = standby[num]
+            day_information[day][2][num] = planes[num]
+
+            num += 1
+
+    
+       
+        print(day_check)
+        day += 1
+       
+
+
 
 main()
 
