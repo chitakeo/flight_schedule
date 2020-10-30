@@ -3,7 +3,6 @@ import random
 
 def main():
     num = 0
-    inspection_time = 48 #検査時間(2日=48時間)
     diagram = []
     inspection = [0] * 6 #検査
     planes = [0] * 6     #各飛行機の検査までの走行距離
@@ -263,13 +262,8 @@ def flight_month(day, day_information, day_of_month, diagram, emergency, inspect
 
             num += 1
 
-    
-       
         print(day_check)
         day += 1
        
-
-
-
 main()
 
