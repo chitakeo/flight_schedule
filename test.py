@@ -59,7 +59,7 @@ def main():
     planes[1] = 850
     planes[2] = 650
     planes[3] = 450
-    planes[4] = 40
+    planes[4] = 1200  #40
     planes[5] = 1240
     
     num = 0
@@ -67,7 +67,7 @@ def main():
     print("\n運行開始\n")
     
     flight_month(1, day_information, day_of_month(month, year), diagram, 0, inspection, standby, planes)
-   
+    #print(diagram)
     while num < day_of_month(month, year):
         print(year + "年" + month + "月" + str(num+1) + "日")
         print("検査が必要な飛行機はありますか?(yes/no)")
@@ -81,12 +81,14 @@ def main():
                 print("機体の番号を入力してください")
                 plane = input()
                 if 1 <= int(plane) <= 6:
-                    flight_month(num+1, day_information, day_of_month(month, year), diagram, int(plane), inspection, standby, planes)
-                    print(day_information)
+                    flight_month(num+1, day_information, day_of_month(month, year), diagram, int(plane)-1, inspection, standby, planes)
+                    #print(day_information)
                     break
                 print("1~6の数値を入力してください") 
 
         num += 1
+
+   
 
 
 def aircraft_check(inspection, planes, standby):
@@ -132,15 +134,31 @@ def inspection_check(inspection):
 
     return result
 
+def charter_check(day, diagram, place):
+    num = 0
+
+    while num < len(diagram):
+        if len(diagram[num]) == 7:
+            if int(diagram[num][5]) == day:
+                #print("テスト")
+                diagram[num][6] = True
+            elif diagram[num][1] == place or diagram[num][3] == place:
+                #print(diagram[num][1])
+                diagram[num][6] = True
+
+        num += 1
+
+
 def decision_standby(standby):
     return 0
     
-def dia_check(diagram):
+def dia_check(day, diagram):
     result = True
 
     for dia in diagram:
         if dia[5] == False:
             result = False
+            break
 
     return result
 
@@ -149,8 +167,17 @@ def time_calculation(time):
     
     return int(result[0]) + int(result[1])/60
 
-def flight_schedule(diagram, inspection, standby, planes):
+def flight_schedule(day, diagram, inspection, standby, planes):
     num = 0
+    charter_count = 0
+
+    if day == 10 or day == 18:
+        while num < 6:
+            standby[num] = False
+            num += 1
+
+    num = 0
+
     while num < 6:
         if inspection[num] != 0:
             print("飛行機" + str(num+1) + "検査中。検査終了まで後" + str(inspection[num]) + "時間")
@@ -170,40 +197,68 @@ def flight_schedule(diagram, inspection, standby, planes):
 
             while True:
                 next = next_flight(diagram, place, time)
+                #print(next)
                 if next == len(diagram):
                     break
                 place = diagram[next][3]
                 time = diagram[next][4]
                 amount_time += diagram[next][4] - diagram[next][2]
-                diagram[next][5] = True
+                if len(diagram[next]) == 6:
+                    diagram[next][5] = True
+                else:
+                    diagram[next][6] = True
+                    if charter_count == 0:
+                        charter_place = diagram[next][3]
+                        charter_count += 1
+
                 print(diagram[next][0])
 
             planes[num] -= amount_time
+            num2 = 0
+
             print("検査まであと" + str(planes[num]) + "km")
             
         num += 1
+    
+    if day == 10 or day == 18:
+        charter_check(day, diagram, charter_place)
 
 def next_flight(diagram, place, time):
     num = 0
     min_time = 24
     frag = True
     while num < len(diagram):
-        if diagram[num][5] == False:
-            if place == "start":
-                if diagram[num][2] - time >= 1:
-                    if diagram[num][2] - time < min_time:
-                        min_time = diagram[num][2] - time
-                        result = num
-                        frag = False
-            else:             
-                if diagram[num][1] == place:
+        if len(diagram[num]) == 6:
+            if diagram[num][5] == False:
+                if place == "start":
                     if diagram[num][2] - time >= 1:
                         if diagram[num][2] - time < min_time:
                             min_time = diagram[num][2] - time
                             result = num
                             frag = False
-
-
+                else:             
+                    if diagram[num][1] == place:
+                        if diagram[num][2] - time >= 1:
+                            if diagram[num][2] - time < min_time:
+                                min_time = diagram[num][2] - time
+                                result = num
+                                frag = False
+        else:
+            if diagram[num][6] == False:
+                if place == "start":
+                    if diagram[num][2] - time >= 1:
+                        if diagram[num][2] - time < min_time:
+                            min_time = diagram[num][2] - time
+                            result = num
+                            frag = False
+                else:             
+                    if diagram[num][1] == place:
+                        if diagram[num][2] - time >= 1:
+                            if diagram[num][2] - time < min_time:
+                                min_time = diagram[num][2] - time
+                                result = num
+                                frag = False
+       
         num += 1
 
     if frag == False:
@@ -235,7 +290,7 @@ def flight_month(day, day_information, day_of_month, diagram, emergency, inspect
     if emergency != 0:
         inspection[emergency] = random.randint(48, 168)
     
-    while day-1 < day_of_month:
+    while day-1 < 19: #day_of_month
         print(str(day) +"日の運行状況")
         aircraft_check(inspection, planes, standby)
         if day-1 == 0:
@@ -247,12 +302,13 @@ def flight_month(day, day_information, day_of_month, diagram, emergency, inspect
 
                 num += 1
 
-        flight_schedule(diagram, inspection, standby, planes)
-        day_check = dia_check(diagram)
+        flight_schedule(day, diagram, inspection, standby, planes)
+        day_check = dia_check(day, diagram)
 
         for dia in diagram:
-            dia[5] = False
-
+            if len(dia) == 6:
+                dia[5] = False
+    
         num = 0
         
         while num < 6:
