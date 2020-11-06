@@ -67,6 +67,12 @@ def main():
     print("\n運行開始\n")
     
     flight_month(1, day_information, day_of_month(month, year), diagram, 0, inspection, standby, planes)
+    num = 30
+    while num < 38:
+        diagram[num][6] = False
+        num += 1
+
+    num = 0
     #print(diagram)
     while num < day_of_month(month, year):
         print(year + "年" + month + "月" + str(num+1) + "日")
@@ -82,7 +88,14 @@ def main():
                 plane = input()
                 if 1 <= int(plane) <= 6:
                     flight_month(num+1, day_information, day_of_month(month, year), diagram, int(plane)-1, inspection, standby, planes)
+                    num2 = 0
+                    while num2 < len(diagram):
+                        if len(diagram[num2]) == 7:
+                            diagram[num2][6] = False
+                        
+                        num2 += 1
                     #print(day_information)
+                    
                     break
                 print("1~6の数値を入力してください") 
 
