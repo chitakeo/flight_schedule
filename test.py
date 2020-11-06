@@ -187,19 +187,31 @@ def flight_schedule(day, diagram, inspection, standby, planes):
                 planes[num] = 1250 
 
         elif standby[num] == True:
-            print("飛行機" + str(num+1) + "検査まであと" + str(planes[num]) + "km スタンバイ")
+            print("飛行機" + str(num+1) + "検査まであと" + str(planes[num]) + "時間 スタンバイ")
         else:
             amount_time = 0
             time = 3.00
             place = "start"
             print("飛行機"+ str(num+1))
             next = 0
+            flight = ""
+            flight2 = ""
+            tmp = 0
+            num3 = 0
 
             while True:
+                
+                
+                if num3 > 0:
+                    tmp = next
+
                 next = next_flight(diagram, place, time)
-                #print(next)
+                
                 if next == len(diagram):
+                    flight += diagram[tmp][3]
+                    flight2 += str(diagram[tmp][4]).replace('.', ':')+"0"
                     break
+
                 place = diagram[next][3]
                 time = diagram[next][4]
                 amount_time += diagram[next][4] - diagram[next][2]
@@ -210,19 +222,29 @@ def flight_schedule(day, diagram, inspection, standby, planes):
                     if charter_count == 0:
                         charter_place = diagram[next][3]
                         charter_count += 1
+                    elif charter_count == 1:
+                        charter_check(day, diagram, charter_place)
+                        charter_count += 1
 
-                print(diagram[next][0])
+                flight += diagram[next][1]+"→"
+                flight2 += str(diagram[next][2]).replace('.', ':')+"0"+" "+"-"+" "
+                num3 += 1
+                
 
+            print(flight)
+            print(flight2)
             planes[num] -= amount_time
-            num2 = 0
+           
 
-            print("検査まであと" + str(planes[num]) + "km")
+            
+
+            #print("検査まであと" + str(planes[num]) + "時間")
             
         num += 1
-    
+    '''
     if day == 10 or day == 18:
         charter_check(day, diagram, charter_place)
-
+    '''
 def next_flight(diagram, place, time):
     num = 0
     min_time = 24
@@ -290,8 +312,8 @@ def flight_month(day, day_information, day_of_month, diagram, emergency, inspect
     if emergency != 0:
         inspection[emergency] = random.randint(48, 168)
     
-    while day-1 < 19: #day_of_month
-        print(str(day) +"日の運行状況")
+    while day-1 <  day_of_month: #day_of_month
+        print(str(day) +"日の運航状況")
         aircraft_check(inspection, planes, standby)
         if day-1 == 0:
             num = 0
