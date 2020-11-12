@@ -1,5 +1,6 @@
 import csv
 import random
+import os.path
 
 def main():
     num = 0
@@ -41,36 +42,42 @@ def main():
     num = 0
     #いちいち実行するのめんどいので
     
-    while num < 6:
-        print("飛行機" + str(num+1) + "の走行距離を入力してください")
-        val = input()
-        print("飛行機" + str(num+1) + "の前回整備実施時の走行距離を入力してください")
-        val2 = input()
-        if str.isdecimal(val) == True and str.isdecimal(val2) == True:
-            planes[num] = 1250 - (int(val) - int(val2))
-            num +=1
-        else:
-            print("数値を入れて下さい")
+#     while num < 6:
+#         print("飛行機" + str(num+1) + "の走行距離を入力してください")
+#         val = input()
+#         print("飛行機" + str(num+1) + "の前回整備実施時の走行距離を入力してください")
+#         val2 = input()
+#         if str.isdecimal(val) == True and str.isdecimal(val2) == True:
+#             planes[num] = 1250 - (int(val) - int(val2))
+#             num +=1
+#         else:
+#             print("数値を入れて下さい")
 
     
-    #本番は以下6行消します
-    '''
+#     本番は以下6行消します
+
     planes[0] = 1050
     planes[1] = 850
     planes[2] = 650
     planes[3] = 450
     planes[4] = 1200  #40
     planes[5] = 1240
-    '''
+
     num = 0
     
     print("\n運行開始\n")
+    if os.path.exists('month.csv'):
+        os.remove('month.csv')
     
     flight_month(1, day_information, day_of_month(month, year), diagram, 0, inspection, standby, planes)
     num = 30
-    while num < 38:
-        diagram[num][6] = False
-        num += 1
+    num2 = 0
+    while num2 < len(diagram):
+        if len(diagram[num2]) == 7:
+            diagram[num2][6] = False
+
+        num2 += 1
+
 
     num = 0
     #print(diagram)
@@ -183,6 +190,7 @@ def time_calculation(time):
 def flight_schedule(day, diagram, inspection, standby, planes):
     num = 0
     charter_count = 0
+    month_list=[]
 
     if day == 10 or day == 18:
         while num < 6:
@@ -192,13 +200,13 @@ def flight_schedule(day, diagram, inspection, standby, planes):
     num = 0
 
     while num < 6:
+        list = []
         if inspection[num] != 0:
             print("飛行機" + str(num+1) + "検査中。検査終了まで後" + str(inspection[num]) + "時間")
             inspection[num] -= 24
             if inspection[num] <= 0:
                 inspection[num] = 0
-                planes[num] = 1250 
-
+                planes[num] = 1250
         elif standby[num] == True:
             print("飛行機" + str(num+1) + "検査まであと" + str(planes[num]) + "時間 スタンバイ")
         else:
@@ -212,17 +220,20 @@ def flight_schedule(day, diagram, inspection, standby, planes):
             tmp = 0
             num3 = 0
 
+            list.append(num+1)
+
             while True:
-                
-                
+
+
                 if num3 > 0:
                     tmp = next
 
                 next = next_flight(diagram, place, time)
-                
+
                 if next == len(diagram):
                     flight += diagram[tmp][3]
                     flight2 += str(diagram[tmp][4]).replace('.', ':')+"0"
+
                     break
 
                 place = diagram[next][3]
@@ -242,18 +253,30 @@ def flight_schedule(day, diagram, inspection, standby, planes):
                 flight += diagram[next][1]+"→"
                 flight2 += str(diagram[next][2]).replace('.', ':')+"0"+" "+"-"+" "
                 num3 += 1
-                
+
+                list.append(diagram[next][1])
+                list.append(diagram[next][2])
+                list.append(diagram[next][3])
+                list.append(diagram[next][4])
+
 
             print(flight)
             print(flight2)
             planes[num] -= amount_time
-           
+            month_list.append(list)
 
-            
+
+
+
+
 
             #print("検査まであと" + str(planes[num]) + "時間")
-            
+
         num += 1
+    with open("month.csv", "a") as f:
+        print("きた！！！")
+        writer = csv.writer(f, lineterminator="\n")
+        writer.writerows(month_list)
     '''
     if day == 10 or day == 18:
         charter_check(day, diagram, charter_place)
