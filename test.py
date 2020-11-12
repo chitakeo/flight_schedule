@@ -40,7 +40,7 @@ def main():
     
     num = 0
     #いちいち実行するのめんどいので
-    
+    '''
     while num < 6:
         print("飛行機" + str(num+1) + "の走行距離を入力してください")
         val = input()
@@ -59,17 +59,20 @@ def main():
     planes[1] = 850
     planes[2] = 650
     planes[3] = 450
-    planes[4] = 1200  #40
+    planes[4] = 40  #40
     planes[5] = 1240
-    '''
+    
     num = 0
     
     print("\n運行開始\n")
     
     flight_month(1, day_information, day_of_month(month, year), diagram, 0, inspection, standby, planes)
-    num = 30
-    while num < 38:
-        diagram[num][6] = False
+    num = 0
+    
+    while num < len(diagram):
+        if len(diagram[num]) == 7:
+            diagram[num][6] = False
+    
         num += 1
 
     num = 0
