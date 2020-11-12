@@ -40,7 +40,7 @@ def main():
     
     num = 0
     #いちいち実行するのめんどいので
-    '''
+    
     while num < 6:
         print("飛行機" + str(num+1) + "の走行距離を入力してください")
         val = input()
@@ -61,7 +61,7 @@ def main():
     planes[3] = 450
     planes[4] = 1200  #40
     planes[5] = 1240
-    
+    '''
     num = 0
     
     print("\n運行開始\n")
