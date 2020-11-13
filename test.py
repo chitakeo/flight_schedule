@@ -264,7 +264,6 @@ def flight_schedule(day, diagram, inspection, standby, planes):
 
             print(flight)
             print(flight2)
-            print(list)
             planes[num] -= amount_time
             month_list.append(list)
             month_list.append("/")
