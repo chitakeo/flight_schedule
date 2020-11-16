@@ -2,30 +2,30 @@ import csv
 import random
 import os
 
-def main():
+def main(year,month):
     num = 0
     diagram = []
     inspection = [0] * 6 #検査
     planes = [0] * 6     #各飛行機の検査までの走行距離
     standby = [0] * 6    #スタンバイ機のフラグ
 
-    while True:
-        print("年を入れてください")
-        year = input()
-        if str.isdecimal(year) == True:
-            break
-
-        print("数値を入れて下さい")
-
-    while True:
-        print("月を入れてください")
-        month = input()
-        if str.isdecimal(month) == True:
-            if 1 <= int(month) <= 12:
-                break
-
-        print("1から12の数値を入れて下さい")
-
+#     while True:
+#         print("年を入れてください")
+#         year = input()
+#         if str.isdecimal(year) == True:
+#             break
+#
+#         print("数値を入れて下さい")
+#
+#     while True:
+#         print("月を入れてください")
+#         month = input()
+#         if str.isdecimal(month) == True:
+#             if 1 <= int(month) <= 12:
+#                 break
+#         print("1から12の数値を入れて下さい")
+    year=str(year)
+    month=str(month)
     day_information = [[[0] * 6 for i in range(3)] for j in range(day_of_month(month, year)+1)]
 
     with open('diagram.csv') as f:
@@ -81,32 +81,32 @@ def main():
 
     num = 0
     #print(diagram)
-    while num < day_of_month(month, year):
-        print(year + "年" + month + "月" + str(num+1) + "日")
-        print("検査が必要な飛行機はありますか?(yes/no)")
-        emergency = input()
-
-        if emergency != "yes" and emergency != "no":
-            print("yes か no を入力してください")
-            num - 1
-        elif emergency == "yes":
-            while True:
-                print("機体の番号を入力してください")
-                plane = input()
-                if 1 <= int(plane) <= 6:
-                    flight_month(num+1, day_information, day_of_month(month, year), diagram, int(plane)-1, inspection, standby, planes)
-                    num2 = 0
-                    while num2 < len(diagram):
-                        if len(diagram[num2]) == 7:
-                            diagram[num2][6] = False
-
-                        num2 += 1
-                    #print(day_information)
-
-                    break
-                print("1~6の数値を入力してください")
-
-        num += 1
+#     while num < day_of_month(month, year):
+#         print(year + "年" + month + "月" + str(num+1) + "日")
+#         print("検査が必要な飛行機はありますか?(yes/no)")
+#         emergency = input()
+#
+#         if emergency != "yes" and emergency != "no":
+#             print("yes か no を入力してください")
+#             num - 1
+#         elif emergency == "yes":
+#             while True:
+#                 print("機体の番号を入力してください")
+#                 plane = input()
+#                 if 1 <= int(plane) <= 6:
+#                     flight_month(num+1, day_information, day_of_month(month, year), diagram, int(plane)-1, inspection, standby, planes)
+#                     num2 = 0
+#                     while num2 < len(diagram):
+#                         if len(diagram[num2]) == 7:
+#                             diagram[num2][6] = False
+#
+#                         num2 += 1
+#                     #print(day_information)
+#
+#                     break
+#                 print("1~6の数値を入力してください")
+#
+#         num += 1
 
 
 
@@ -198,6 +198,8 @@ def flight_schedule(day, diagram, inspection, standby, planes):
             num += 1
 
     num = 0
+
+    month_list.append(str(day))
 
     while num < 6:
         list = []
@@ -376,5 +378,6 @@ def flight_month(day, day_information, day_of_month, diagram, emergency, inspect
         print(day_check)
         day += 1
        
-main()
+# if __name__ == "__main__":
+#     main()
 
