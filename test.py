@@ -66,7 +66,7 @@ def main():
     
     print("\n運行開始\n")
     
-    flight_month(1, day_information, day_of_month(month, year), diagram, 0, inspection, standby, planes)
+    flight_month(1, day_information, day_of_month(month, year), diagram, 7, inspection, standby, planes)
     num = 0
     
     while num < len(diagram):
@@ -325,7 +325,7 @@ def day_of_month(month, year):
         return 31
 
 def flight_month(day, day_information, day_of_month, diagram, emergency, inspection, standby, planes):
-    if emergency != 0:
+    if emergency != 7:
         inspection[emergency] = random.randint(48, 168)
     
     while day-1 <  day_of_month: #day_of_month
