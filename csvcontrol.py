@@ -7,6 +7,71 @@ import os
 import result
 import test
 
+class EntrySampleGetValue(ttk.Frame):
+    def __init__(self, master):
+        super().__init__(master)
+        self.entry1 = StringVar()
+        self.entry2 = StringVar()
+        self.entry3 = StringVar()
+        self.entry4 = StringVar()
+        self.entry5 = StringVar()
+        self.entry6 = StringVar()
+        self.year = StringVar()
+        self.month = StringVar()
+        frame = ttk.Frame(master)
+        frame.pack()
+        button1 = ttk.Button(
+            frame,
+            text='OK', command=self.createWidgets)
+        button1.grid()
+        self.root = ""
+        self.pack()
+
+    def createWidgets(self):
+        self.root = Tk()
+        self.root.geometry("300x500")
+        label7 = ttk.Label(self.root,text="作成する年")
+        label7.pack()
+        self.entry7 = ttk.Entry(self.root,textvariable = self.year)
+        self.entry7.pack()
+        label8 = ttk.Label(self.root,text="作成する月")
+        label8.pack()
+        self.entry8 = ttk.Entry(self.root,textvariable = self.month)
+        self.entry8.pack()
+        label1 = ttk.Label(self.root,text="飛行機1の飛行距離")
+        label1.pack()
+        self.entry1 = ttk.Entry(self.root,textvariable = self.entry1)
+        self.entry1.pack()
+        label2 = ttk.Label(self.root,text="飛行機2の飛行距離")
+        label2.pack()
+        self.entry2 = ttk.Entry(self.root,textvariable = self.entry2)
+        self.entry2.pack()
+        label3 = ttk.Label(self.root,text="飛行機3の飛行距離")
+        label3.pack()
+        self.entry3 = ttk.Entry(self.root,textvariable = self.entry3)
+        self.entry3.pack()
+        label4 = ttk.Label(self.root,text="飛行機4の飛行距離")
+        label4.pack()
+        self.entry4 = ttk.Entry(self.root,textvariable = self.entry4)
+        self.entry4.pack()
+        label5 = ttk.Label(self.root,text="飛行機5の飛行距離")
+        label5.pack()
+        self.entry5 = ttk.Entry(self.root,textvariable = self.entry5)
+        self.entry5.pack()
+        label6 = ttk.Label(self.root,text="飛行機6の飛行距離")
+        label6.pack()
+        self.entry6 = ttk.Entry(self.root,textvariable = self.entry6)
+        self.entry6.pack()
+
+        button = ttk.Button(self.root,text="ok",command=self.getEntryText)
+        button.pack()
+
+    def getEntryText(self):
+        print(self.month.get())
+        test.main(2020,10,self.entry1.get(),self.entry2.get(),self.entry3.get(),self.entry4.get(),self.entry5.get(),self.entry6.get())
+        result.main(self)
+        self.root.destroy()
+
 class CSVLogic:
     """
     csvViewer読み込み、書き込みロジック
@@ -71,8 +136,6 @@ class CSVControl:
         """
         アプリの立ち上げとイベント登録
         """
-        def createNewWindow(master):
-            test.main(2020,10)
 
         master = Tk()
         master.title("flight_schedule_maker")
@@ -83,15 +146,7 @@ class CSVControl:
         self.view.setReadButtonCommand(self.readButtonCommand)
         frame = ttk.Frame(master)
         frame.pack()
-        button1 = ttk.Button(
-            frame,
-            text='OK', command=createNewWindow(master))
-        button1.grid()
-        result.main(master)
-#         filePathLabel = ttk.Label(master,text="FilePath")
-#         filePathLabel.grid(column=0,row=0)
-#         filepathEntry = ttk.Entry(master,textvariable=self.filePath,widt=10)
-#         filepathEntry.grid(column=1,row=0)
+        EntrySampleGetValue(master)
 #         self.pack()
         master.mainloop()
 

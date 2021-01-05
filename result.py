@@ -60,7 +60,7 @@ def plot_wave(day_data):
             ax1.set_yticklabels(air_list)
             ax1.plot(x, y, color=color_list[int(day_data[i][0])-1],linewidth=5)
             label=str(place[0])+"→"+str(place[1])
-            ax1.text(x[0], i+0.1, label, size=10)
+            ax1.text(x[0], i+0.1, label, size=8)
 
     return fig
 
@@ -71,7 +71,6 @@ def button1(event,tab,list, exit):
     for child in children:
         child.destroy()
     value = value.replace("日","")
-    print(value)
     fig = plot_wave(list[int(value)-1])
     canvas = FigureCanvasTkAgg(fig, event)
     canvas.get_tk_widget().grid(row=1, column=0)
@@ -101,7 +100,6 @@ def main(master):
     #test.pyの出力結果読み込み
     while True:
         while True:
-            print(num)
             if flag == False:
                 days_data.append(month_data[num])
                 flag = True
@@ -138,6 +136,20 @@ def main(master):
             partial(button1,frame1 ,v, data))
 
     root.mainloop()
+
+def createNewWindow():
+        root = Tk()
+        sub_win = Toplevel(root)
+        sub_win.title("modal dialog")
+        sub_win.geometry("300x300")
+        paramdialog = StringVar()
+        label = ttk.Label(sub_win,text="input param")
+        label.pack()
+        entry = ttk.Entry(sub_win,textvariable=paramdialog)
+        entry.pack()
+        button = ttk.Button(sub_win,text="open",command = print(paramdialog.get()))
+        button.pack()
+#         test.main(2020,10)
 
 if __name__ == "__main__":
     main("test")

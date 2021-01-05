@@ -278,6 +278,7 @@ class PropertyView(ttk.Frame):
         """
         取得したレコードデータを各入力ボックスのWidget変数に振り分け
         """
+        print(param)
         for key in self.param_dict.keys():
             self.param_dict[key].set(param[key])
 

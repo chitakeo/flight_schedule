@@ -2,7 +2,7 @@ import csv
 import random
 import os
 
-def main(year,month):
+def main(year,month,p1,p2,p3,p4,p5,p6):
     num = 0
     diagram = []
     inspection = [0] * 6 #検査
@@ -56,12 +56,12 @@ def main(year,month):
 
     #本番は以下6行消します
     '''
-    planes[0] = 1050
-    planes[1] = 850
-    planes[2] = 650
-    planes[3] = 450
-    planes[4] = 40  #40
-    planes[5] = 1240
+    planes[0] = int(p1)
+    planes[1] = int(p2)
+    planes[2] = int(p3)
+    planes[3] = int(p4)
+    planes[4] = int(p5)  #40
+    planes[5] = int(p6)
 
     num = 0
 
